@@ -1,17 +1,10 @@
-# oasis
+**Only a Smart Inventory System** es una solución diseñada para optimizar la gestión de inventarios en pequeñas empresas.  
+La aplicación permite llevar un control eficiente de productos, así como de las entradas y salidas de cantidades, reduciendo errores humanos y mejorando la toma de decisiones.
 
-A new Flutter project.
+Su enfoque principal es ofrecer una **aplicación móvil intuitiva, segura y escalable**, que facilite la administración de los productos manejados por el cliente.  
+La aplicación móvil se centra en el manejo de operaciones **CRUD (Crear, Leer, Actualizar y Eliminar)** y en el control de stock, garantizando simplicidad y efectividad en la gestión diaria.
 
-## Getting Started
+Se podrá visulaizar en un "log" la fecha en la que se modifican las cantidades de cada producto, para saber cuándo y quién fue el responsable del ajuste.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A continuación, se dejará el link del avance del diseño de la aplicación.
+https://www.figma.com/proto/xvJ8ROvnIRfAs0QuXQyrvc/DESIGN---O.A.S.I.S?node-id=1-2&p=f&t=0Nj6VLUXYSX0D531-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2
