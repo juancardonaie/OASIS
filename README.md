@@ -38,10 +38,21 @@ lib/📁
     │   │   └── services/    # Lógica de negocio o consumo de APIs
     |   |
     │   ├── products/📁
-    │   │   ├── screens/     # Pantallas de la funcionalidad
-    │   │   ├── widgets/     # Widgets específicos de esta funcionalidad
-    │   │   └── services/    # Lógica de negocio o consumo de APIs
-    |   |
+    │   │   ├── createProducts/📁     # Crear productos.
+    │   │   |   ├── screens/     # Pantallas de la funcionalidad
+    │   │   |   ├── widgets/     # Widgets específicos de esta funcionalidad
+    │   │   |   └── services/    # Lógica de negocio o consumo de APIs
+    |   |   |
+    |   |   ├── productList/📁
+    │   │   |    ├── screens/     # Pantallas de la funcionalidad
+    │   │   |    ├── widgets/     # Widgets específicos de esta funcionalidad
+    │   │   |    └── services/    # Lógica de negocio o consumo de APIs
+    |   |   |
+    |   |   ├── productManagement/📁
+    │   │       ├── screens/     # Pantallas de la funcionalidad
+    │   │       ├── widgets/     # Widgets específicos de esta funcionalidad
+    │   │       └── services/    # Lógica de negocio o consumo de APIs
+    |   |   
     │   ├── category/📁
     │   │   ├── screens/     # Pantallas de la funcionalidad
     │   │   ├── widgets/     # Widgets específicos de esta funcionalidad
@@ -52,15 +63,7 @@ lib/📁
     │   │   ├── widgets/     # Widgets específicos de esta funcionalidad
     │   │   └── services/    # Lógica de negocio o consumo de APIs
     |   |
-    │   ├── productManagement/📁
-    │   │   ├── screens/     # Pantallas de la funcionalidad
-    │   │   ├── widgets/     # Widgets específicos de esta funcionalidad
-    │   │   └── services/    # Lógica de negocio o consumo de APIs
     |   |
-    │   ├── productList/📁
-    │   │   ├── screens/     # Pantallas de la funcionalidad
-    │   │   ├── widgets/     # Widgets específicos de esta funcionalidad
-    │   │   └── services/    # Lógica de negocio o consumo de APIs
     |   |
     │   ├── inventory/📁
     │   │   ├── screens/     # Pantallas de la funcionalidad
