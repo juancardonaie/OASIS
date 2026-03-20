@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/product_service.dart';
 
 class ProductForm extends StatefulWidget {
   const ProductForm({super.key});
@@ -8,6 +9,7 @@ class ProductForm extends StatefulWidget {
 }
 
 class _ProductFormState extends State<ProductForm> {
+  final ProductService _productService = ProductService();
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -15,11 +17,21 @@ class _ProductFormState extends State<ProductForm> {
   final stockMinController = TextEditingController();
   final priceController = TextEditingController();
 
-  String? selectedCategory;
-  String? selectedContact;
+  String? selectedCategoryId;
+  String? selectedContactId;
+  bool _isLoading = false;
 
-  final List<String> categories = ['Electrónica', 'Alimentos', 'Aseo'];
-  final List<String> contacts = ['Proveedor A', 'Proveedor B', 'Proveedor C'];
+  // Mientras agrego el maestro original
+  final List<Map<String, String>> categories = [
+    {'id': 'cat1', 'name': 'Electrónica'},
+    {'id': 'cat2', 'name': 'Alimentos'},
+    {'id': 'cat3', 'name': 'Aseo'},
+  ];
+  final List<Map<String, String>> contacts = [
+    {'id': 'prov1', 'name': 'Proveedor A'},
+    {'id': 'prov2', 'name': 'Proveedor B'},
+    {'id': 'prov3', 'name': 'Proveedor C'},
+  ];
 
   InputDecoration inputDecoration(String label) {
     return InputDecoration(
@@ -30,19 +42,38 @@ class _ProductFormState extends State<ProductForm> {
     );
   }
 
-  void saveProduct() {
+  void saveProduct() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final product = {
-      "name": nameController.text,
-      "category": selectedCategory,
-      "initialStock": stockInitialController.text,
-      "minStock": stockMinController.text,
-      "price": priceController.text,
-      "contact": selectedContact,
-    };
+    setState(() {
+      _isLoading = true;
+    });
 
-    print(product);
+    try {
+      await _productService.createProduct(
+        name: nameController.text,
+        price: double.parse(priceController.text),
+        categoryId: selectedCategoryId!, // obligatorio
+        contactId: selectedContactId,
+        openingStock: int.parse(stockInitialController.text),
+        minimumStock: int.parse(stockMinController.text),
+        remarks: null, // aún no tienes campo en UI
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Producto guardado correctamente')),
+      );
+
+      clearForm();
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   void clearForm() {
@@ -52,8 +83,8 @@ class _ProductFormState extends State<ProductForm> {
     priceController.clear();
 
     setState(() {
-      selectedCategory = null;
-      selectedContact = null;
+      selectedCategoryId = null;
+      selectedContactId = null;
     });
   }
 
@@ -91,15 +122,21 @@ class _ProductFormState extends State<ProductForm> {
           const SizedBox(height: 16),
 
           DropdownButtonFormField<String>(
-            value: selectedCategory,
+            value: selectedCategoryId,
             decoration: inputDecoration('Categoría *'),
             items: categories.map((category) {
-              return DropdownMenuItem(value: category, child: Text(category));
+              return DropdownMenuItem(value: category['id'], child: Text(category['name']!));
             }).toList(),
             onChanged: (value) {
               setState(() {
-                selectedCategory = value;
+                selectedCategoryId = value;
               });
+            },
+            validator: (value) {
+              if (value == null) {
+                return 'Debe seleccionar una categoría';
+              }
+              return null;
             },
           ),
 
@@ -109,6 +146,18 @@ class _ProductFormState extends State<ProductForm> {
             controller: stockInitialController,
             keyboardType: TextInputType.number,
             decoration: inputDecoration('Stock inicial *'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Ingrese el stok inicial';
+              }
+              if (int.tryParse(value) == null) {
+                return 'El stock inicial debe ser un número válido';
+              }
+              if (int.parse(value) < 0) {
+                return 'El stock inicial no puede ser negativo';
+              }
+              return null;
+            },
           ),
 
           const SizedBox(height: 16),
@@ -117,6 +166,18 @@ class _ProductFormState extends State<ProductForm> {
             controller: stockMinController,
             keyboardType: TextInputType.number,
             decoration: inputDecoration('Stock mínimo *'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Ingrese el stok mínimo';
+              }
+              if (int.tryParse(value) == null) {
+                return 'El stock mínimo debe ser un número válido';
+              }
+              if (int.parse(value) < 0) {
+                return 'El stock mínimo no puede ser negativo';
+              }
+              return null;
+            },
           ),
 
           const SizedBox(height: 16),
@@ -125,19 +186,31 @@ class _ProductFormState extends State<ProductForm> {
             controller: priceController,
             keyboardType: TextInputType.number,
             decoration: inputDecoration('Precio unitario *'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Ingrese el precio';
+              }
+              if (double.tryParse(value) == null) {
+                return 'El precio debe ser un número válido';
+              }
+              if (double.parse(value) <= 0) {
+                return 'El precio debe ser mayor a 0';
+              }
+              return null;
+            },
           ),
 
           const SizedBox(height: 16),
 
           DropdownButtonFormField<String>(
-            value: selectedContact,
-            decoration: inputDecoration('Asociar contacto *'),
+            value: selectedContactId,
+            decoration: inputDecoration('Asociar contacto'),
             items: contacts.map((contact) {
-              return DropdownMenuItem(value: contact, child: Text(contact));
+              return DropdownMenuItem(value: contact['id'], child: Text(contact['name']!));
             }).toList(),
             onChanged: (value) {
               setState(() {
-                selectedContact = value;
+                selectedContactId = value;
               });
             },
           ),
@@ -148,8 +221,15 @@ class _ProductFormState extends State<ProductForm> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: saveProduct,
-                  child: const Text('Guardar'),
+                  onPressed: _isLoading ? null : saveProduct,
+                  // child: const Text('Guardar'),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Guardar'),
                 ),
               ),
 
