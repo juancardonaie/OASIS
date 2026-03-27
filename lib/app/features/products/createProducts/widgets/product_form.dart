@@ -108,6 +108,8 @@ class _ProductFormState extends State<ProductForm> {
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
 
+          const SizedBox(height: 20),
+
           TextFormField(
             controller: nameController,
             decoration: inputDecoration('Nombre del producto *'),
@@ -125,7 +127,10 @@ class _ProductFormState extends State<ProductForm> {
             value: selectedCategoryId,
             decoration: inputDecoration('Categoría *'),
             items: categories.map((category) {
-              return DropdownMenuItem(value: category['id'], child: Text(category['name']!));
+              return DropdownMenuItem(
+                value: category['id'],
+                child: Text(category['name']!),
+              );
             }).toList(),
             onChanged: (value) {
               setState(() {
@@ -206,7 +211,10 @@ class _ProductFormState extends State<ProductForm> {
             value: selectedContactId,
             decoration: inputDecoration('Asociar contacto'),
             items: contacts.map((contact) {
-              return DropdownMenuItem(value: contact['id'], child: Text(contact['name']!));
+              return DropdownMenuItem(
+                value: contact['id'],
+                child: Text(contact['name']!),
+              );
             }).toList(),
             onChanged: (value) {
               setState(() {
