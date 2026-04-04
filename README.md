@@ -92,3 +92,19 @@ Esto significa que el proyecto se estructura principalmente por componentes func
 Este enfoque permite que cada funcionalidad sea independiente, escalable y fácil de mantener.
 
 Esta organización facilita el crecimiento del proyecto y mejora la mantenibilidad del código a medida que la aplicación evoluciona.
+
+## Documentación
+
+- En el primero sprint (Rama: feaure/OASIS-create-products), se realizó la creación del widget que se encarga de crear los produtos con sus respectivas validaciones. Únicamente los crea, no los lista.
+
+También se realizó la conexión con Firebase para poder guardar los registros en una base de datos en la nube.
+
+Adicionalmente algunos campos contiene datos quemados, como lo son **categoría** y **contacto**, debido a que esos campos son seleccionables y de momento no existe el maestro para obtener la información.
+
+Estos maestros se crearán en más adelante.
+
+- En el segundo sprint se desarrolló la creación del widget que lista los productos, estos se visualizan en tarjetas individuales, con la opción de **editar** y **eliminar**.
+
+Cuando el usuario hace un tap en una tarjeta, la misma se visualiza con un borde de color púrpura para tener una mejor visualización del producto que se quiere editar o eliminar.
+
+Actualmente las acciones de editar y eliminar están en desarrollo, no están 100% funcionales.

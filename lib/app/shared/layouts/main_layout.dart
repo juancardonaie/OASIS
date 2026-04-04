@@ -20,8 +20,8 @@ class _MainLayoutState extends State<MainLayout> {
   AppRoutes.home,
   AppRoutes.createProducto,
   AppRoutes.productList,
-  AppRoutes.inventory,
-  AppRoutes.categories,
+  // AppRoutes.inventory,
+  // AppRoutes.categories,
 ];
 
   void onItemTapped(int index) {

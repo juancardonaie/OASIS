@@ -15,19 +15,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     // testWrite();
-    testFirestore();
+    // testFirestore();
   }
 
-  Future<void> testFirestore() async {
-    final snapshot = await db.collection('products').get();
+  // Future<void> testFirestore() async {
+  //   final snapshot = await db.collection('products').get();
 
-    print("Cantidad de documentos: ${snapshot.docs.length}");
+  //   print("Cantidad de documentos: ${snapshot.docs.length}");
 
-    for (var doc in snapshot.docs) {
-      print("ID: ${doc.id}");
-      print("DATA: ${doc.data()}");
-    }
-  }
+  //   for (var doc in snapshot.docs) {
+  //     print("ID: ${doc.id}");
+  //     print("DATA: ${doc.data()}");
+  //   }
+  // }
 
   // Future<void> testWrite() async {
   //   await db.collection('products').add({
