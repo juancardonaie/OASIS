@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/product_service.dart';
+import '../services/notification_service.dart';
 
 class ProductForm extends StatefulWidget {
   const ProductForm({super.key});
@@ -10,6 +11,8 @@ class ProductForm extends StatefulWidget {
 
 class _ProductFormState extends State<ProductForm> {
   final ProductService _productService = ProductService();
+  final NotificationService _notificationService = NotificationService();
+
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -21,12 +24,24 @@ class _ProductFormState extends State<ProductForm> {
   String? selectedContactId;
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+
+    _notificationService.onMessage = (message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), duration: Duration(seconds: 3)),
+      );
+    };
+  }
+
   // Mientras agrego el maestro original
   final List<Map<String, String>> categories = [
     {'id': 'cat1', 'name': 'Electrónica'},
     {'id': 'cat2', 'name': 'Alimentos'},
     {'id': 'cat3', 'name': 'Aseo'},
   ];
+
   final List<Map<String, String>> contacts = [
     {'id': 'prov1', 'name': 'Proveedor A'},
     {'id': 'prov2', 'name': 'Proveedor B'},
@@ -60,9 +75,11 @@ class _ProductFormState extends State<ProductForm> {
         remarks: null, // aún no tienes campo en UI
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Producto guardado correctamente')),
-      );
+      _notificationService.sendNotification();
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Producto guardado correctamente')),
+      // );
 
       clearForm();
     } catch (e) {
