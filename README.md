@@ -95,16 +95,25 @@ Esta organización facilita el crecimiento del proyecto y mejora la mantenibilid
 
 ## Documentación
 
-- En el primero sprint (Rama: feaure/OASIS-create-products), se realizó la creación del widget que se encarga de crear los produtos con sus respectivas validaciones. Únicamente los crea, no los lista.
+- En el primer sprint (Rama: feaure/OASIS-create-products), se realizó la creación del widget que se encarga de crear los produtos con sus respectivas validaciones. Únicamente los crea, no los lista.
 
 También se realizó la conexión con Firebase para poder guardar los registros en una base de datos en la nube.
 
-Adicionalmente algunos campos contiene datos quemados, como lo son **categoría** y **contacto**, debido a que esos campos son seleccionables y de momento no existe el maestro para obtener la información.
+Adicionalmente algunos campos contienen datos quemados, como lo son **categoría** y **contacto**, debido a que esos campos son seleccionables y de momento no existe el maestro para obtener la información.
 
-Estos maestros se crearán en más adelante.
+Estos maestros se crearán más adelante.
 
 - En el segundo sprint se desarrolló la creación del widget que lista los productos, estos se visualizan en tarjetas individuales, con la opción de **editar** y **eliminar**.
 
 Cuando el usuario hace un tap en una tarjeta, la misma se visualiza con un borde de color púrpura para tener una mejor visualización del producto que se quiere editar o eliminar.
 
 Actualmente las acciones de editar y eliminar están en desarrollo, no están 100% funcionales.
+
+-**Sprint 3 _(feature/12-create-push-notifications)_:** En este sprint, se realizó la incorporación de **notificaciones push**, siguiendo estos pasos:
+1. Se realizó la instalación de **Ngrok** y se creó la cuenta basada en la de GitHub.
+2. Se creó una API en *.NET Core Web API*, donde se incorporó la librería "signalR", que permite trabajar cómodamente con websocket, lo que nos evita crearlos desde cero, manteniendo una conexión abierta, persistente y bidireccional.
+3. Se presentaron problemas de CORS, por lo que los navegadores al tratar de comunicarse con URL diferentes tienen por defecto esa restricción; se agregó una configuración en el "program.cs" para que la API permita conexiones externas (desde una URL diferente).
+4. En Flutter, se agregó una librería de "SignalR", que permite conectarse con una API que utilice la misma. ( comando: **flutter pub add signalr_netcore**)
+5. Se agregó un servicio, que crea una única instancia para toda la aplicación cuando se inicializa, en este punto, se abre la conexión y mantiene persistente.
+6. En el componente que crea los productos, se crea una instancia del servicio, en donde se realiza un "initState()" para registrar la función que escucha una vez que se crea la pantalla.
+7. Al guardar un producto, muestra un notificación en Snackbar emitida por la API en tiempo real.
