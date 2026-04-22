@@ -3,7 +3,7 @@ class AppRoutes{
 
     static const createProducto = '/products/createProducts';
 
-    static const productList = '/products';
+    static const productList = '/products/productList';
 
     static const inventory = '/inventory';
 

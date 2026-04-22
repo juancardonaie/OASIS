@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:oasis/app/features/products/productList/model/product_model.dart';
+import 'package:oasis/app/features/products/productList/services/updateProduct_service.dart';
 import '../services/product_service.dart';
+import '../services/notification_service.dart';
 
 class ProductForm extends StatefulWidget {
-  const ProductForm({super.key});
+
+  final ProductModel? product;
+
+  const ProductForm({super.key, this.product});
 
   @override
   State<ProductForm> createState() => _ProductFormState();
@@ -10,6 +16,8 @@ class ProductForm extends StatefulWidget {
 
 class _ProductFormState extends State<ProductForm> {
   final ProductService _productService = ProductService();
+  final NotificationService _notificationService = NotificationService();
+
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -21,12 +29,35 @@ class _ProductFormState extends State<ProductForm> {
   String? selectedContactId;
   bool _isLoading = false;
 
+  bool _isEdition = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.product != null) {
+      nameController.text = widget.product!.name;
+      priceController.text = widget.product!.price.toString();
+      stockMinController.text = widget.product!.minimumStock.toString();
+      selectedCategoryId = widget.product!.categoryId;
+
+      _isEdition = true;
+    }
+
+    _notificationService.onMessage = (message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), duration: Duration(seconds: 3)),
+      );
+    };
+  }
+
   // Mientras agrego el maestro original
   final List<Map<String, String>> categories = [
     {'id': 'cat1', 'name': 'Electrónica'},
     {'id': 'cat2', 'name': 'Alimentos'},
     {'id': 'cat3', 'name': 'Aseo'},
   ];
+
   final List<Map<String, String>> contacts = [
     {'id': 'prov1', 'name': 'Proveedor A'},
     {'id': 'prov2', 'name': 'Proveedor B'},
@@ -50,19 +81,36 @@ class _ProductFormState extends State<ProductForm> {
     });
 
     try {
-      await _productService.createProduct(
-        name: nameController.text,
-        price: double.parse(priceController.text),
-        categoryId: selectedCategoryId!, // obligatorio
-        contactId: selectedContactId,
-        openingStock: int.parse(stockInitialController.text),
-        minimumStock: int.parse(stockMinController.text),
-        remarks: null, // aún no tienes campo en UI
-      );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Producto guardado correctamente')),
-      );
+      if(widget.product != null){
+        await UpdateProductService().updateProduct(
+          productId: widget.product!.id,
+          name: nameController.text,
+          price: double.parse(priceController.text),
+          categoryId: selectedCategoryId!,
+          minimumStock: int.parse(stockMinController.text),
+        );
+
+        print('ACTUALIZÓ');
+      } else {
+        await _productService.createProduct(
+          name: nameController.text,
+          price: double.parse(priceController.text),
+          categoryId: selectedCategoryId!, // obligatorio
+          contactId: selectedContactId,
+          openingStock: int.parse(stockInitialController.text),
+          minimumStock: int.parse(stockMinController.text),
+          remarks: null, // aún no tienes campo en UI
+          currentStock: int.parse(stockInitialController.text)
+        );
+      }
+
+      _notificationService.sendNotification();
+      
+      // Scaffol
+      // dMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Producto guardado correctamente')),
+      // );
 
       clearForm();
     } catch (e) {
@@ -96,17 +144,19 @@ class _ProductFormState extends State<ProductForm> {
       key: _formKey,
       child: ListView(
         children: [
-          const Text(
-            'Crear producto',
+           Text(
+            !_isEdition ? 'Crear producto' : 'Actualizar producto',
             style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 4),
 
-          const Text(
-            'Añade un nuevo producto al inventario',
+          Text(
+            !_isEdition ? 'Añade un nuevo producto al inventario.' : 'Actualiza los datos del producto.',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
+
+          const SizedBox(height: 20),
 
           TextFormField(
             controller: nameController,
@@ -125,7 +175,10 @@ class _ProductFormState extends State<ProductForm> {
             value: selectedCategoryId,
             decoration: inputDecoration('Categoría *'),
             items: categories.map((category) {
-              return DropdownMenuItem(value: category['id'], child: Text(category['name']!));
+              return DropdownMenuItem(
+                value: category['id'],
+                child: Text(category['name']!),
+              );
             }).toList(),
             onChanged: (value) {
               setState(() {
@@ -145,8 +198,10 @@ class _ProductFormState extends State<ProductForm> {
           TextFormField(
             controller: stockInitialController,
             keyboardType: TextInputType.number,
+            enabled: !_isEdition,
             decoration: inputDecoration('Stock inicial *'),
             validator: (value) {
+              if( _isEdition) return null;
               if (value == null || value.isEmpty) {
                 return 'Ingrese el stok inicial';
               }
@@ -206,7 +261,10 @@ class _ProductFormState extends State<ProductForm> {
             value: selectedContactId,
             decoration: inputDecoration('Asociar contacto'),
             items: contacts.map((contact) {
-              return DropdownMenuItem(value: contact['id'], child: Text(contact['name']!));
+              return DropdownMenuItem(
+                value: contact['id'],
+                child: Text(contact['name']!),
+              );
             }).toList(),
             onChanged: (value) {
               setState(() {
@@ -229,7 +287,7 @@ class _ProductFormState extends State<ProductForm> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Guardar'),
+                      :  Text(!_isEdition  ? 'Guardar' : 'Actualizar'),
                 ),
               ),
 
