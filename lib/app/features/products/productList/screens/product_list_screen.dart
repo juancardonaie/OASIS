@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:oasis/app/features/products/createProducts/screens/create_product_screen.dart';
 import 'package:oasis/app/features/products/productList/services/Get_Product_Service.dart';
 import 'package:intl/intl.dart';
+import 'package:oasis/app/features/products/productList/services/deleteProduct_service.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -11,8 +13,13 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductListScreen> {
   final GetProductService _productService = GetProductService();
-
+  final DeleteProductService _deleteService = DeleteProductService();
+  
   String? _selectedProductId;
+
+  Future<void> _deleteProduct(String productId) async {
+    await _deleteService.deleteProduct(productId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +110,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         Row(
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () => {
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(
+                                    builder: (context) => CreateProductScreen(product: product),
+                                    ),
+                                  )
+                              },
                               icon: const Icon(Icons.edit_outlined),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () => _deleteProduct(product.id),
                               icon: const Icon(Icons.delete_outline),
                             ),
                           ],

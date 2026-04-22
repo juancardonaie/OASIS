@@ -11,6 +11,7 @@ class ProductService {
     required int openingStock,
     required int minimumStock,
     String? remarks,
+    required int currentStock
   }) async {
     final data = {
       'name': name,
@@ -19,6 +20,7 @@ class ProductService {
       'openingStock': openingStock,
       'minimumStock': minimumStock,
       'createdAt': FieldValue.serverTimestamp(),
+      'currentStock': currentStock
     };
 
     if (contactId != null) {
