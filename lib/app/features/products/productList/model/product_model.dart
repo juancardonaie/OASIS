@@ -3,7 +3,7 @@ class ProductModel {
   final String name;
   final double price;
   final int stock;
-  final String category;
+  final String categoryId;
   final int minimumStock;
 
   ProductModel({
@@ -11,7 +11,7 @@ class ProductModel {
     required this.name, 
     required this.price, 
     required this.stock, 
-    required this.category,
+    required this.categoryId,
     required this.minimumStock
   });
 
@@ -22,7 +22,7 @@ class ProductModel {
       name: data['name'] ?? '',
       price: (data['price'] ?? 0).toDouble(),
       stock: data['currentStock'] ?? 0,
-      category: data['category'] ?? '',
+      categoryId: data['categoryId'] ?? '',
       minimumStock: data['minimumStock'] ?? 0
     );
   }

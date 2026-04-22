@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:oasis/app/features/products/productList/model/product_model.dart';
+import 'package:oasis/app/features/products/productList/services/updateProduct_service.dart';
 import '../services/product_service.dart';
 import '../services/notification_service.dart';
 
 class ProductForm extends StatefulWidget {
-  const ProductForm({super.key});
+
+  final ProductModel? product;
+
+  const ProductForm({super.key, this.product});
 
   @override
   State<ProductForm> createState() => _ProductFormState();
@@ -24,9 +29,20 @@ class _ProductFormState extends State<ProductForm> {
   String? selectedContactId;
   bool _isLoading = false;
 
+  bool _isEdition = false;
+
   @override
   void initState() {
     super.initState();
+
+    if (widget.product != null) {
+      nameController.text = widget.product!.name;
+      priceController.text = widget.product!.price.toString();
+      stockMinController.text = widget.product!.minimumStock.toString();
+      selectedCategoryId = widget.product!.categoryId;
+
+      _isEdition = true;
+    }
 
     _notificationService.onMessage = (message) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,19 +81,34 @@ class _ProductFormState extends State<ProductForm> {
     });
 
     try {
-      await _productService.createProduct(
-        name: nameController.text,
-        price: double.parse(priceController.text),
-        categoryId: selectedCategoryId!, // obligatorio
-        contactId: selectedContactId,
-        openingStock: int.parse(stockInitialController.text),
-        minimumStock: int.parse(stockMinController.text),
-        remarks: null, // aún no tienes campo en UI
-      );
+
+      if(widget.product != null){
+        await UpdateProductService().updateProduct(
+          productId: widget.product!.id,
+          name: nameController.text,
+          price: double.parse(priceController.text),
+          categoryId: selectedCategoryId!,
+          minimumStock: int.parse(stockMinController.text),
+        );
+
+        print('ACTUALIZÓ');
+      } else {
+        await _productService.createProduct(
+          name: nameController.text,
+          price: double.parse(priceController.text),
+          categoryId: selectedCategoryId!, // obligatorio
+          contactId: selectedContactId,
+          openingStock: int.parse(stockInitialController.text),
+          minimumStock: int.parse(stockMinController.text),
+          remarks: null, // aún no tienes campo en UI
+          currentStock: int.parse(stockInitialController.text)
+        );
+      }
 
       _notificationService.sendNotification();
-
-      // ScaffoldMessenger.of(context).showSnackBar(
+      
+      // Scaffol
+      // dMessenger.of(context).showSnackBar(
       //   const SnackBar(content: Text('Producto guardado correctamente')),
       // );
 
@@ -113,15 +144,15 @@ class _ProductFormState extends State<ProductForm> {
       key: _formKey,
       child: ListView(
         children: [
-          const Text(
-            'Crear producto',
+           Text(
+            !_isEdition ? 'Crear producto' : 'Actualizar producto',
             style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 4),
 
-          const Text(
-            'Añade un nuevo producto al inventario',
+          Text(
+            !_isEdition ? 'Añade un nuevo producto al inventario.' : 'Actualiza los datos del producto.',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
 
@@ -167,8 +198,10 @@ class _ProductFormState extends State<ProductForm> {
           TextFormField(
             controller: stockInitialController,
             keyboardType: TextInputType.number,
+            enabled: !_isEdition,
             decoration: inputDecoration('Stock inicial *'),
             validator: (value) {
+              if( _isEdition) return null;
               if (value == null || value.isEmpty) {
                 return 'Ingrese el stok inicial';
               }
@@ -254,7 +287,7 @@ class _ProductFormState extends State<ProductForm> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Guardar'),
+                      :  Text(!_isEdition  ? 'Guardar' : 'Actualizar'),
                 ),
               ),
 
