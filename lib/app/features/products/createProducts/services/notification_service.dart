@@ -1,5 +1,6 @@
 import 'package:signalr_netcore/signalr_client.dart';
-import 'package:http/http.dart' as http;
+import 'package:signalr_netcore/ihub_protocol.dart';
+import 'package:http/http.dart' as http; 
 
 class NotificationService {
 
@@ -12,24 +13,28 @@ class NotificationService {
 
   NotificationService._internal();
   
-  late HubConnection hubConnection; //Este es el Websocket
+  late HubConnection hubConnection; 
   final url = 'https://imaginary-huffier-thuy.ngrok-free.dev/notifications';
   final urlApi = 'https://imaginary-huffier-thuy.ngrok-free.dev/api/Notification/Send';
 
   Function(String message)? onMessage;
 
 
-  Future<void> startConnection() async{
-    hubConnection = HubConnectionBuilder()
-      .withUrl(url)
-      .build();
+  Future<void> startConnection() async { 
+    final headers = MessageHeaders(); 
+    headers.setHeaderValue('ngrok-skip-browser-warning', 'true'); 
 
-    await hubConnection.start();
+    final options = HttpConnectionOptions( 
+      headers: headers, 
+    ); 
+ 
+    hubConnection = HubConnectionBuilder() 
+      .withUrl(url, options: options ) 
+      .build(); 
 
-    listenNotification();
-
-    // print('Conexión abierta');
-  }
+    await hubConnection.start(); 
+    listenNotification(); 
+  } 
 
   Future<void> sendNotification() async{
     final response = await http.post(
