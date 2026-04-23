@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/Home_Service.dart';
+import '../widgets/home_header.dart';
+import '../widgets/home_stats_grid.dart';
+import '../widgets/low_stock_list.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final db = FirebaseFirestore.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    // testWrite();
-    // testFirestore();
-  }
-
-  // Future<void> testFirestore() async {
-  //   final snapshot = await db.collection('products').get();
-
-  //   print("Cantidad de documentos: ${snapshot.docs.length}");
-
-  //   for (var doc in snapshot.docs) {
-  //     print("ID: ${doc.id}");
-  //     print("DATA: ${doc.data()}");
-  //   }
-  // }
-
-  // Future<void> testWrite() async {
-  //   await db.collection('products').add({
-  //     'name': 'TEST DESDE APP',
-  //     'price': 123,
-  //   });
-
-  //   print("Documento creado desde la app");
-  // }
-
-  @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("Home Screen"));
+    final homeService = HomeService();
+
+    return Scaffold(
+      body: SafeArea(
+        child: StreamBuilder<HomeStatsModel>(
+          stream: homeService.getHomeStats(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return const Center(child: Text('Error al cargar el inventario'));
+            }
+
+            final stats = snapshot.data!;
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const HomeHeader(),
+                  const SizedBox(height: 24),
+                  HomeStatsGrid(stats: stats),
+                  const SizedBox(height: 32),
+                  if (stats.lowStockProducts.isNotEmpty)
+                    LowStockList(products: stats.lowStockProducts),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }

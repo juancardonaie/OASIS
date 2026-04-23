@@ -9,6 +9,14 @@ Se podrá visulaizar en un "log" la fecha en la que se modifican las cantidades 
 A continuación, se dejará el link del avance del diseño de la aplicación.
 https://www.figma.com/proto/xvJ8ROvnIRfAs0QuXQyrvc/DESIGN---O.A.S.I.S?node-id=1-2&p=f&t=0Nj6VLUXYSX0D531-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2
 
+## Documentación completa
+Se debe iniciar sesión en confluence
+
+* Overview: https://oasis-app.atlassian.net/wiki/external/OGFhODM3ZDUwMzE5NGFlZThiYTdjYTk3NGI2NGUwMjg
+* Architecture: https://oasis-app.atlassian.net/wiki/external/NWNlZDg4OGI2NWI4NDFiMGFjZmQ3ZDA2ZGU2NDU3ODg
+* User history: https://oasis-app.atlassian.net/wiki/external/ZTFhMzkxYmM2NTVkNDRmMzk5ZmQ2NzNjNDAwN2RiYzA
+* Technical manual: https://oasis-app.atlassian.net/wiki/external/ZGMwYjBlNjg2ZTljNDI3ZTgyNDQ0MzI2ODdkMmRmNzM
+* User manual: https://oasis-app.atlassian.net/wiki/external/MDk3MThkNjA3NWQ1NGM2OGIzZjkzMzU1NDFhZDM5MGU
 
 
 El proyecto tendrá la siguiente estructura.
