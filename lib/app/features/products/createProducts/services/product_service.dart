@@ -1,7 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 
 class ProductService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  // final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  final String _baseUrl = 'http://localhost:5214/api/products';
 
   Future<void> createProduct({
     required String name,
@@ -13,24 +18,24 @@ class ProductService {
     String? remarks,
     required int currentStock
   }) async {
-    final data = {
+    final body = {
       'name': name,
       'price': price,
       'categoryId': categoryId,
+      'contactId': contactId ?? '',
       'openingStock': openingStock,
       'minimumStock': minimumStock,
-      'createdAt': FieldValue.serverTimestamp(),
-      'currentStock': currentStock
+      'currentStock': currentStock,
     };
 
-    if (contactId != null) {
-      data['contactId'] = contactId;
-    }
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode(body),
+    );
 
-    if (remarks != null && remarks.isNotEmpty) {
-      data['remarks'] = remarks;
+    if(response.statusCode != 200){
+      throw Exception('Error al crear producto ${response.body}');
     }
-
-    await _db.collection('products').add(data);
   }
 }
