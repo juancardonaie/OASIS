@@ -18,8 +18,9 @@ Se debe iniciar sesión en confluence
 * Technical manual: https://oasis-app.atlassian.net/wiki/external/ZGMwYjBlNjg2ZTljNDI3ZTgyNDQ0MzI2ODdkMmRmNzM
 * User manual: https://oasis-app.atlassian.net/wiki/external/MDk3MThkNjA3NWQ1NGM2OGIzZjkzMzU1NDFhZDM5MGU
 
+##
 
-El proyecto tendrá la siguiente estructura.
+El proyecto tendrá la siguiente estructura:
 
 ## Estructura del Proyecto OASIS
 
@@ -125,3 +126,9 @@ Actualmente las acciones de editar y eliminar están en desarrollo, no están 10
 5. Se agregó un servicio, que crea una única instancia para toda la aplicación cuando se inicializa, en este punto, se abre la conexión y mantiene persistente.
 6. En el componente que crea los productos, se crea una instancia del servicio, en donde se realiza un "initState()" para registrar la función que escucha una vez que se crea la pantalla.
 7. Al guardar un producto, muestra un notificación en Snackbar emitida por la API en tiempo real.
+
+## Sprint 4
+
+Se implementaron pruebas unitarias utilizando Flutter Test.
+Se ejecutó cobertura de código mediante el comando:```flutter test --coverage```, 
+generando el archivo coverage/lcov.info.
