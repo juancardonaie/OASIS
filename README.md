@@ -9,7 +9,7 @@ Se podrá visulaizar en un "log" la fecha en la que se modifican las cantidades 
 A continuación, se dejará el link del avance del diseño de la aplicación.
 https://www.figma.com/proto/xvJ8ROvnIRfAs0QuXQyrvc/DESIGN---O.A.S.I.S?node-id=1-2&p=f&t=0Nj6VLUXYSX0D531-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2
 
-[!IMPORTANT]
+> [!IMPORTANT]
 ## Documentación completa
 Se debe iniciar sesión en confluence
 
