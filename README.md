@@ -135,5 +135,5 @@ Se implementaron pruebas unitarias utilizando Flutter Test.
 Se ejecutó cobertura de código mediante el comando:```flutter test --coverage```, 
 generando el archivo coverage/lcov.info.
 
-[!NOTE]
-Iniciando el README.md, se encuentran los links con la documentación más específica. ```:)```
+> [!NOTE]
+> Iniciando el README.md, se encuentran los links con la documentación más específica. ```:)```
